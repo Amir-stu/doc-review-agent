@@ -62,7 +62,7 @@ Any step can be re-run on its own from that folder (`docreview run-step 03 runs/
 - Subagents: headless `claude -p` via the runner pattern from
   `deep-research-cli/deep_research/runner.py` (native claude.exe,
   `--strict-mcp-config --disable-slash-commands --setting-sources ""`,
-  `--json-schema`, run from a folder outside `C:\Users\amirb`). No API key.
+  `--json-schema`, run from a folder outside the home directory). No API key.
 - Models: 03a on sonnet, 04 consistency pass on sonnet. No opus needed.
 
 ## Commands
