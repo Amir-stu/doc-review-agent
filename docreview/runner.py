@@ -43,16 +43,22 @@ def build_command(spec: AgentSpec, claude_path: str) -> list[str]:
     command = [
         claude_path,
         "-p",
-        "--output-format", "json",
+        "--output-format",
+        "json",
         "--no-session-persistence",
-        "--setting-sources", "",
+        "--setting-sources",
+        "",
         # Without these, the user's MCP connectors and skill list load into every agent (~150k tokens).
         "--strict-mcp-config",
         "--disable-slash-commands",
-        "--model", spec.model,
-        "--system-prompt", spec.system_prompt,
-        "--max-budget-usd", str(spec.max_budget_usd),
-        "--tools", tool_list,
+        "--model",
+        spec.model,
+        "--system-prompt",
+        spec.system_prompt,
+        "--max-budget-usd",
+        str(spec.max_budget_usd),
+        "--tools",
+        tool_list,
     ]
     if spec.tools:
         command = [*command, "--allowedTools", tool_list]

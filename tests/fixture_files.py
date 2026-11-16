@@ -51,8 +51,18 @@ SEEDED_XLSX = [
 SEEDED_TYPOS = {"pptx": "verröffentlicht", "docx": "Projeckt", "xlsx": "Gesammt"}
 
 
-def _textbox(slide, text: str, *, font: str = "Arial", size: float = 18, color: str | None = None,
-             width: float = 8.0, height: float = 1.0, top: float = 1.5, fixed_size: bool = False):
+def _textbox(
+    slide,
+    text: str,
+    *,
+    font: str = "Arial",
+    size: float = 18,
+    color: str | None = None,
+    width: float = 8.0,
+    height: float = 1.0,
+    top: float = 1.5,
+    fixed_size: bool = False,
+):
     box = slide.shapes.add_textbox(Inches(0.5), Inches(top), Inches(width), Inches(height))
     if fixed_size:
         box.text_frame.word_wrap = True
@@ -79,7 +89,10 @@ def build_pptx(path: Path) -> Path:
         slide,
         "Dieser Text ist viel zu lang für das kleine Textfeld und läuft deshalb über den unteren Rand hinaus "
         "und wird in der Präsentation abgeschnitten dargestellt.",
-        width=2.0, height=0.5, top=4.5, fixed_size=True,
+        width=2.0,
+        height=0.5,
+        top=4.5,
+        fixed_size=True,
     )
     slide = presentation.slides.add_slide(blank)
     _textbox(slide, "Kontakt per Email an das Projektteam.")
@@ -89,8 +102,16 @@ def build_pptx(path: Path) -> Path:
     return path
 
 
-def _docx_paragraph(document, text: str, *, style: str | None = None, font: str | None = None,
-                    size: float | None = None, bold: bool | None = None, color: str | None = None):
+def _docx_paragraph(
+    document,
+    text: str,
+    *,
+    style: str | None = None,
+    font: str | None = None,
+    size: float | None = None,
+    bold: bool | None = None,
+    color: str | None = None,
+):
     paragraph = document.add_paragraph(style=style)
     run = paragraph.add_run(text)
     if font:

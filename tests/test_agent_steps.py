@@ -16,8 +16,14 @@ TARGETS = {"p0": TextTarget("u", "p0", "Absatz 1", "Das Projeckt ist fertig.")}
 
 
 def _item(**overrides):
-    base = {"target_id": "p0", "category": "spelling", "severity": "medium", "description": "Tippfehler",
-            "original": "Projeckt", "suggestion": "Projekt"}
+    base = {
+        "target_id": "p0",
+        "category": "spelling",
+        "severity": "medium",
+        "description": "Tippfehler",
+        "original": "Projeckt",
+        "suggestion": "Projekt",
+    }
     return {**base, **overrides}
 
 

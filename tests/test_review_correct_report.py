@@ -38,9 +38,18 @@ def _scripted(answers):
 
 def _finding(finding_id="F001", fix=True, **overrides):
     base = Finding(
-        unit_id="u", target_id="p0", locator="Absatz 1", category="spelling", severity="medium",
-        description="Tippfehler", original="Projeckt", suggestion="Projekt", confidence="certain", source="llm",
-        fix=Fix("replace_text", "p0", "Projeckt", "Projekt") if fix else None, finding_id=finding_id,
+        unit_id="u",
+        target_id="p0",
+        locator="Absatz 1",
+        category="spelling",
+        severity="medium",
+        description="Tippfehler",
+        original="Projeckt",
+        suggestion="Projekt",
+        confidence="certain",
+        source="llm",
+        fix=Fix("replace_text", "p0", "Projeckt", "Projekt") if fix else None,
+        finding_id=finding_id,
     )
     return replace(base, **overrides)
 
@@ -141,7 +150,7 @@ def test_apply_decision_when_xlsx_formula_cell_is_not_changed(tmp_path: Path):
     from openpyxl import Workbook
 
     workbook = Workbook()
-    workbook.active["A1"] = "=CONCAT(\"Email\",\"x\")"
+    workbook.active["A1"] = '=CONCAT("Email","x")'
     workbook.save(tmp_path / "a.xlsx")
     finding = _finding(target_id="Sheet!A1", fix=True)
     finding = replace(finding, fix=Fix("replace_text", "Sheet!A1", "Email", "E-Mail"))
@@ -185,7 +194,10 @@ def test_label_recheck_when_fix_persists_or_new_error_labels_and_renumbers():
         _finding("F003", target_id="p2", original="Teh", suggestion="The"),
     ]
     rows = label_recheck(previous, recheck, first_id=10)
-    assert [(row.finding.finding_id, row.status) for row in rows] == [("F010", STATUS_NOT_FIXED), ("F011", STATUS_NEW)]
+    assert [(row.finding.finding_id, row.status) for row in rows] == [
+        ("F010", STATUS_NOT_FIXED),
+        ("F011", STATUS_NEW),
+    ]
 
 
 # --- step 06b --------------------------------------------------------------------------------------

@@ -36,14 +36,13 @@ def _target(unit_id: str, paragraph: Paragraph) -> TextTarget:
 # --- PowerPoint -------------------------------------------------------------------------------------
 
 
-def estimate_text_height_pt(texts: list[str], *, font_size_pt: float, width_pt: float, word_wrap: bool) -> float:
+def estimate_text_height_pt(
+    texts: list[str], *, font_size_pt: float, width_pt: float, word_wrap: bool
+) -> float:
     """Rough layout: average glyph width of half an em. Good enough to flag, not to prove, an overflow."""
     usable_width = max(width_pt - 2 * TEXTBOX_INSET_PT, 1.0)
     chars_per_line = max(1, int(usable_width / (font_size_pt * AVERAGE_CHAR_WIDTH_EM)))
-    if word_wrap:
-        lines = sum(max(1, math.ceil(len(text) / chars_per_line)) for text in texts)
-    else:
-        lines = len(texts)
+    lines = sum(max(1, math.ceil(len(text) / chars_per_line)) for text in texts) if word_wrap else len(texts)
     return lines * font_size_pt * LINE_HEIGHT_FACTOR + 2 * TEXTBOX_INSET_PT
 
 
@@ -182,7 +181,11 @@ def _excel_findings(unit: Unit) -> Iterator[Finding]:
         if not numbers:
             continue
         for cell in cells:
-            if isinstance(cell.value, str) and cell.data_type == "s" and NUMBER_AS_TEXT.match(cell.value.strip()):
+            if (
+                isinstance(cell.value, str)
+                and cell.data_type == "s"
+                and NUMBER_AS_TEXT.match(cell.value.strip())
+            ):
                 yield rule_finding(
                     _cell_target(unit.unit_id, cell),
                     category="file_specific",

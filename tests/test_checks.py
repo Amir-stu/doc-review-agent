@@ -18,19 +18,28 @@ def _matches(findings, unit_id, category, needle):
     return any(f.unit_id == unit_id and f.category == category and needle in f.description for f in findings)
 
 
-@pytest.mark.parametrize(("file_type", "seeded"), [("pptx", SEEDED_PPTX), ("docx", SEEDED_DOCX), ("xlsx", SEEDED_XLSX)])
-def test_run_rule_checks_when_fixture_has_seeded_errors_finds_all(fixture_paths, example_rules, file_type, seeded):
+@pytest.mark.parametrize(
+    ("file_type", "seeded"), [("pptx", SEEDED_PPTX), ("docx", SEEDED_DOCX), ("xlsx", SEEDED_XLSX)]
+)
+def test_run_rule_checks_when_fixture_has_seeded_errors_finds_all(
+    fixture_paths, example_rules, file_type, seeded
+):
     findings = run_rule_checks(read_document(fixture_paths[file_type]), example_rules)
     missing = [item for item in seeded if not _matches(findings, *item)]
     assert missing == []
 
 
 @pytest.mark.parametrize("file_type", ["pptx", "docx", "xlsx"])
-def test_run_rule_checks_when_fixture_checked_reports_no_unseeded_findings(fixture_paths, example_rules, file_type):
+def test_run_rule_checks_when_fixture_checked_reports_no_unseeded_findings(
+    fixture_paths, example_rules, file_type
+):
     seeded = {"pptx": SEEDED_PPTX, "docx": SEEDED_DOCX, "xlsx": SEEDED_XLSX}[file_type]
     findings = run_rule_checks(read_document(fixture_paths[file_type]), example_rules)
-    unexpected = [f for f in findings if not any(f.unit_id == u and f.category == c and n in f.description
-                                                  for u, c, n in seeded)]
+    unexpected = [
+        f
+        for f in findings
+        if not any(f.unit_id == u and f.category == c and n in f.description for u, c, n in seeded)
+    ]
     assert unexpected == []
 
 

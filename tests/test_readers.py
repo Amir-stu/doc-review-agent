@@ -91,3 +91,33 @@ def test_heading_level_when_style_name_given_returns_level(style, expected):
 
 def test_split_cell_id_when_sheet_has_exclamation_keeps_title():
     assert split_cell_id("Q1!Daten!B3") == ("Q1!Daten", "B3")
+
+
+def test_read_pptx_when_table_reads_each_cell_as_container(tmp_path: Path):
+    from pptx import Presentation
+    from pptx.util import Inches
+
+    presentation = Presentation()
+    slide = presentation.slides.add_slide(presentation.slide_layouts[6])
+    table = slide.shapes.add_table(2, 2, Inches(1), Inches(1), Inches(4), Inches(1)).table
+    table.cell(1, 1).text = "Umsatz 2026"
+    presentation.save(tmp_path / "t.pptx")
+    unit = read_document(tmp_path / "t.pptx").units[0]
+    paragraph = next(p for p in unit.paragraphs if p.text == "Umsatz 2026")
+    assert "Zeile 2 Spalte 2" in paragraph.locator
+    assert any(c.container_id == paragraph.container_id for c in unit.containers)
+
+
+def test_read_docx_when_table_has_merged_cells_reads_each_cell_once(tmp_path: Path):
+    from docx import Document as new_docx
+
+    document = new_docx()
+    document.add_paragraph("Vorher")
+    table = document.add_table(rows=2, cols=2)
+    table.cell(0, 0).merge(table.cell(0, 1)).text = "Kopfzeile"
+    table.cell(1, 0).text = "Wert"
+    document.add_paragraph("Nachher")
+    document.save(tmp_path / "t.docx")
+    paragraphs = read_document(tmp_path / "t.docx").units[0].paragraphs
+    assert [p.text for p in paragraphs] == ["Vorher", "Kopfzeile", "Wert", "Nachher"]
+    assert paragraphs[1].locator.endswith("Tabelle 1, Zeile 1 Spalte 1")

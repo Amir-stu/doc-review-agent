@@ -47,7 +47,9 @@ def _read_sheet(formula_sheet: Any, value_sheet: Any) -> Unit:
                     is_formula=is_formula,
                 )
             )
-    return Unit(unit_id=f"sheet-{formula_sheet.title}", label=f'Blatt "{formula_sheet.title}"', cells=tuple(cells))
+    return Unit(
+        unit_id=f"sheet-{formula_sheet.title}", label=f'Blatt "{formula_sheet.title}"', cells=tuple(cells)
+    )
 
 
 def read_xlsx(path: Path) -> Document:

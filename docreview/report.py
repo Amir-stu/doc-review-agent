@@ -12,7 +12,17 @@ from openpyxl.utils import get_column_letter
 
 from docreview.correct import ReportRow
 
-HEADERS = ("Nr.", "Fundstelle", "Kategorie", "Schwere", "Sicherheit", "Befund", "Original", "Vorschlag", "Status")
+HEADERS = (
+    "Nr.",
+    "Fundstelle",
+    "Kategorie",
+    "Schwere",
+    "Sicherheit",
+    "Befund",
+    "Original",
+    "Vorschlag",
+    "Status",
+)
 COLUMN_WIDTHS = (7, 45, 14, 9, 11, 50, 30, 30, 28)
 CATEGORY_LABELS = {
     "spelling": "Rechtschreibung",
@@ -93,7 +103,10 @@ def _summary_lines(rows: list[ReportRow], context: ReportContext) -> list[str]:
     if context.corrected_file:
         lines += ["", f"Korrigierte Kopie: `{context.corrected_file}`"]
     if context.unchecked_units:
-        lines += ["", "**Nicht sprachlich geprüft** (Agent fehlgeschlagen): " + ", ".join(context.unchecked_units)]
+        lines += [
+            "",
+            "**Nicht sprachlich geprüft** (Agent fehlgeschlagen): " + ", ".join(context.unchecked_units),
+        ]
     lines += [f"\n> {warning}" for warning in context.warnings]
     return lines
 
@@ -106,7 +119,9 @@ def write_markdown_report(path: Path, rows: list[ReportRow], context: ReportCont
     return path
 
 
-def write_reports(directory: Path, stem: str, rows: list[ReportRow], context: ReportContext) -> tuple[Path, Path]:
+def write_reports(
+    directory: Path, stem: str, rows: list[ReportRow], context: ReportContext
+) -> tuple[Path, Path]:
     return (
         write_xlsx_report(directory / f"{stem}.xlsx", rows),
         write_markdown_report(directory / f"{stem}.md", rows, context),

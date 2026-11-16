@@ -23,7 +23,9 @@ def _target(unit_id: str, paragraph: Paragraph) -> TextTarget:
 def _font_findings(unit_id: str, paragraph: Paragraph, rules: FormatRules) -> Iterator[Finding]:
     if not rules.allowed_fonts:
         return
-    bad_fonts = sorted({run.font for run in paragraph.runs if run.font and run.font not in rules.allowed_fonts})
+    bad_fonts = sorted(
+        {run.font for run in paragraph.runs if run.font and run.font not in rules.allowed_fonts}
+    )
     for font in bad_fonts:
         replacement = rules.replacement_font or rules.allowed_fonts[0]
         yield rule_finding(
@@ -68,7 +70,9 @@ def _size_findings(unit_id: str, paragraph: Paragraph, rules: FormatRules) -> It
 def _color_findings(unit_id: str, paragraph: Paragraph, rules: FormatRules) -> Iterator[Finding]:
     if not rules.allowed_colors:
         return
-    colors = sorted({run.color for run in paragraph.runs if run.color and run.color not in rules.allowed_colors})
+    colors = sorted(
+        {run.color for run in paragraph.runs if run.color and run.color not in rules.allowed_colors}
+    )
     for color in colors:
         yield rule_finding(
             _target(unit_id, paragraph),

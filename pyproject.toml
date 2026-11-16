@@ -33,6 +33,7 @@ line-length = 110
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E501"]  # ruff format enforces line length on code; long string literals stay readable
 
 [tool.mypy]
 python_version = "3.13"

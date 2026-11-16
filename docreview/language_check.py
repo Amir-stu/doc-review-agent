@@ -5,7 +5,13 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
-from docreview.agent_findings import FINDINGS_SCHEMA, AgentCheckResult, AgentFunction, run_checked_agent, targets_prompt
+from docreview.agent_findings import (
+    FINDINGS_SCHEMA,
+    AgentCheckResult,
+    AgentFunction,
+    run_checked_agent,
+    targets_prompt,
+)
 from docreview.checks.common import TextTarget, text_targets
 from docreview.config import AGENT_BUDGET_USD, LANGUAGE_MODEL
 from docreview.instructions import Instruction

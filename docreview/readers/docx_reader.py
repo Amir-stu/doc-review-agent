@@ -59,8 +59,8 @@ def heading_level(style: str | None) -> int | None:
     if style is None:
         return None
     for prefix in HEADING_PREFIXES:
-        if style.startswith(prefix) and style[len(prefix):].isdigit():
-            return int(style[len(prefix):])
+        if style.startswith(prefix) and style[len(prefix) :].isdigit():
+            return int(style[len(prefix) :])
     return None
 
 
@@ -109,7 +109,8 @@ def _make_unit(index: int, title: str, paragraphs: list[Paragraph]) -> Unit:
 def read_docx(path: Path) -> Document:
     document = open_docx(str(path))
     units: list[Unit] = []
-    title, paragraphs, counter = FRONT_MATTER_LABEL, [], 0
+    title, counter = FRONT_MATTER_LABEL, 0
+    paragraphs: list[Paragraph] = []
     for ref in iter_paragraphs(document):
         text = ref.paragraph.text
         style = ref.paragraph.style.name if ref.paragraph.style is not None else None

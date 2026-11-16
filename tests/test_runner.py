@@ -111,9 +111,7 @@ def test_run_agent_sends_prompt_on_stdin_in_sandbox(monkeypatch, tmp_path):
 
     monkeypatch.setattr(subprocess, "run", fake_run)
 
-    result = run_agent(
-        make_spec(), "What is X?", sandbox_dir=tmp_path, timeout_s=30, claude_path=CLAUDE_PATH
-    )
+    result = run_agent(make_spec(), "What is X?", sandbox_dir=tmp_path, timeout_s=30, claude_path=CLAUDE_PATH)
 
     assert result.text == "answer text"
     assert captured["kwargs"]["input"] == "What is X?"
@@ -203,7 +201,9 @@ def test_resolve_claude_executable_when_shim_without_native_binary_refuses(monke
 
 
 def test_parse_output_when_usage_limit_raises_usage_limit_error():
-    payload = success_payload(is_error=True, result="You've hit your 5-hour limit - resets 8:20pm (Europe/Paris)")
+    payload = success_payload(
+        is_error=True, result="You've hit your 5-hour limit - resets 8:20pm (Europe/Paris)"
+    )
 
     with pytest.raises(UsageLimitError, match="resets 8:20pm"):
         parse_output(payload)

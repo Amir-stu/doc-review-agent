@@ -57,7 +57,9 @@ def status_rows(
         elif outcome.get(finding.finding_id) is None:
             rows.append(ReportRow(finding, STATUS_CORRECTED))
         else:
-            rows.append(ReportRow(finding, STATUS_MANUAL, f"Korrektur fehlgeschlagen: {outcome[finding.finding_id]}"))
+            rows.append(
+                ReportRow(finding, STATUS_MANUAL, f"Korrektur fehlgeschlagen: {outcome[finding.finding_id]}")
+            )
     return rows
 
 

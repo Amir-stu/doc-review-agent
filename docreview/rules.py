@@ -83,7 +83,8 @@ def parse_rules(raw: dict[str, Any]) -> FormatRules:
     )
 
 
-def load_rules(path: Path) -> FormatRules:
+def read_raw_rules(path: Path) -> dict[str, Any]:
+    """Read and validate the YAML; returns the raw mapping so it can be stored in the run folder."""
     if not path.is_file():
         raise RulesError(f"Formatvorgaben nicht gefunden: {path}")
     try:
@@ -92,4 +93,9 @@ def load_rules(path: Path) -> FormatRules:
         raise RulesError(f"Formatvorgaben sind kein gültiges YAML: {error}") from error
     if not isinstance(raw, dict):
         raise RulesError("Formatvorgaben müssen ein YAML-Objekt sein")
-    return parse_rules(raw)
+    parse_rules(raw)
+    return raw
+
+
+def load_rules(path: Path) -> FormatRules:
+    return parse_rules(read_raw_rules(path))

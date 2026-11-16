@@ -4,7 +4,13 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from docreview.agent_findings import FINDINGS_SCHEMA, AgentCheckResult, AgentFunction, run_checked_agent, targets_prompt
+from docreview.agent_findings import (
+    FINDINGS_SCHEMA,
+    AgentCheckResult,
+    AgentFunction,
+    run_checked_agent,
+    targets_prompt,
+)
 from docreview.checks.common import text_targets
 from docreview.config import AGENT_BUDGET_USD, CONSISTENCY_MAX_CHARS, CONSISTENCY_MODEL, SEVERITY_ORDER
 from docreview.instructions import Instruction
@@ -15,7 +21,9 @@ INSTRUCTION_FILE = "04b_term_consistency.md"
 TRUNCATION_NOTE = "(Text gekürzt – nur der Anfang des Dokuments wurde geprüft.)"
 
 
-def run_term_consistency(document: Document, instruction: Instruction, agent: AgentFunction) -> AgentCheckResult:
+def run_term_consistency(
+    document: Document, instruction: Instruction, agent: AgentFunction
+) -> AgentCheckResult:
     targets = {}
     used = 0
     truncated = False
