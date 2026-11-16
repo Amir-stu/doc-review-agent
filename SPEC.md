@@ -1,6 +1,9 @@
 # Spec: doc-review-agent (Korrekturlese-Agent)
 
-Status: DRAFT, not approved. No code exists yet.
+Status: approved 2026-11-16 and built (v0.1). Open questions were not answered; defaults used:
+German + English, per-finding approval, example rules file, lean build. Question 4 (real use case) is still open.
+Deviation from the plan: step 04 got a second instruction file (04a collect, 04b term-consistency
+subagent), so there are 9 step files for the 6 diagram boxes.
 
 ## Objective
 

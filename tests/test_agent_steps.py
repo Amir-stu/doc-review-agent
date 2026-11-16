@@ -137,3 +137,16 @@ def test_load_instruction_when_all_step_files_present_parse(tmp_path: Path):
 def test_parse_instruction_when_malformed_raises(text):
     with pytest.raises(InstructionError):
         parse_instruction(text)
+
+
+def test_collect_when_llm_span_overlaps_rule_finding_on_same_target_drops_llm(fixture_paths, example_rules):
+    document = read_document(fixture_paths["xlsx"])
+    rules = run_rule_checks(document, example_rules)
+    term = next(f for f in rules if "Begriff" in f.description)
+    wider = term.__class__(
+        **{**term.__dict__, "source": "llm", "original": "Email-Kampagne", "suggestion": "E-Mail-Kampagne"}
+    )
+    elsewhere = term.__class__(**{**wider.__dict__, "target_id": "Umsatz!A8"})
+    collected = collect(document, [rules, [wider, elsewhere]])
+    llm = [f for f in collected if f.source == "llm"]
+    assert [f.target_id for f in llm] == ["Umsatz!A8"]

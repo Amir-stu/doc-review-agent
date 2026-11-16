@@ -60,11 +60,30 @@ def _dedupe_key(finding: Finding) -> tuple[str, str, str]:
     return finding.target_id, finding.original.casefold(), finding.suggestion.casefold()
 
 
+def _overlaps_text_fix(finding: Finding, kept: list[Finding]) -> bool:
+    """True if an agent finding edits the same text as an already kept text fix on the same target.
+
+    Applying both would make the second fix fail ("Textstelle nicht mehr vorhanden").
+    """
+    if finding.source != "llm":
+        return False
+    original = finding.original.casefold()
+    return any(
+        other.target_id == finding.target_id
+        and other.fix is not None
+        and other.fix.kind == "replace_text"
+        and (other.original.casefold() in original or original in other.original.casefold())
+        for other in kept
+    )
+
+
 def collect(document: Document, finding_groups: list[list[Finding]]) -> list[Finding]:
     """Rule findings should come first in finding_groups: on duplicates the first one wins."""
     unique: dict[tuple[str, str, str], Finding] = {}
     for group in finding_groups:
         for finding in group:
+            if _overlaps_text_fix(finding, list(unique.values())):
+                continue
             unique.setdefault(_dedupe_key(finding), finding)
     order = _document_order(document)
     ranked = sorted(
