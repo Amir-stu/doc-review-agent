@@ -1,0 +1,17 @@
+# Formatvorgaben – example. Copy and adapt to your house style.
+fonts:
+  allowed: [Arial]
+  replacement: Arial          # used for automatic font fixes
+font_size_pt:
+  min: 10
+  max: 44
+colors_allowed: ["000000", "FFFFFF", "1F3864", "C00000"]
+date_format: DD.MM.YYYY       # or YYYY-MM-DD
+currency:
+  symbol: "€"
+  position: after             # 1.234,56 €   (before: € 1.234,56)
+percent_style: "10 %"         # or "10%"
+terms:                        # variant: preferred spelling
+  Email: E-Mail
+  email: E-Mail
+  Ecommerce: E-Commerce

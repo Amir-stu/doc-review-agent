@@ -1,0 +1,39 @@
+[project]
+name = "doc-review-agent"
+version = "0.1.0"
+description = "Proofreads PowerPoint, Word and Excel files against format rules in a 6-step pipeline with a human review gate."
+requires-python = ">=3.11"
+dependencies = [
+  "python-pptx>=1.0",
+  "python-docx>=1.1",
+  "openpyxl>=3.1",
+  "pyyaml>=6",
+  "jsonschema>=4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10", "types-PyYAML", "types-jsonschema"]
+
+[project.scripts]
+docreview = "docreview.cli:entrypoint"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["docreview*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=docreview --cov-report=term-missing --cov-fail-under=80"
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
